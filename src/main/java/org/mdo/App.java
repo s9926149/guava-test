@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.*;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +34,7 @@ public class App
 
         Futures.addCallback(future1, new FutureCallback<String>() {
             public void onSuccess(@Nullable String s) {
-                System.out.println("task1 success");
+                System.out.println("task1 success: ");
             }
 
             public void onFailure(Throwable throwable) {
@@ -54,6 +55,10 @@ public class App
         service.shutdown();
         try {
             service.awaitTermination(200, TimeUnit.MILLISECONDS);
+            String result1 = future1.get();
+            Integer result2 = future2.get();
+
+            System.out.println(result1 + " " + result2);
         } catch (InterruptedException e) {
             throw new Exception("failed to complete in given time", e);
         }
